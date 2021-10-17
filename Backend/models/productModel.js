@@ -40,6 +40,31 @@ const productSchema = mongoose.Schema({
     type: Number,
     required: [true, "Product stock is required"],
     maxLength: [4, "Product stock cannot exceed 4 caracters"],
-  },
-
+  default: 0,
+},
+numOfReviews: {
+    type: Number,
+    default: 0,
+},
+reviews: [
+    {
+        name: {
+            type:String,
+            required: [true, "Name is required"],
+        },
+        rating: {
+            type: Number,
+            required: [true, "Rating is required"],
+        },
+        comment: {
+            type: String,
+            required: [true, "Comment is required"],
+        },
+    }],
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 });
+
+module.exports = mongoose.model("Product", productSchema);
