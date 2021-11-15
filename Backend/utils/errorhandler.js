@@ -1,0 +1,1 @@
+class ErrorHandler extends  Error
