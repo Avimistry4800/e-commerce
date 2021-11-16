@@ -9,12 +9,28 @@ class ApiFeatures {
             $regex: this.queryStr.keyword,
             $options: 'i',
         } : {};
-console.log(keyword);	
+
 
         this.query = this.query.find({
             ...keyword
         });
         return this;
+    }
+
+    filter() {
+
+        const queryCopy  = {...this.queryStr}
+
+        // Remove some fields from category
+        const removeFields = ['page', 'limit',  'keyword'];
+        removeFields.forEach(key => delete queryCopy[key]);
+
+        // Filter for Price and Rating
+        // const quaryStr
+
+        this.query = this.query.find(queryCopy);	
+        return this;
+
     }
 }
 
