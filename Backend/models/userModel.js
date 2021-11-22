@@ -62,4 +62,15 @@ userSchema.pre("save", async function (next) {
             expiresIn: process.env.JWT_EXPIRE,  
         })
     }
+
+// Compare password to the hashed password in the database
+
+userSchema.methods.comparePassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+}
+
+
+
 module.exports = mongoose.model("User", userSchema);
+
+
