@@ -12,8 +12,51 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         public_id:"This is a sample ID",
         url:"This is a sample URL"
     }});
+
+const token = await user.getJwtToken();
+
 res.status(201).json({
     success:true,
-    user,
-})
-})
+    token,
+    });
+});
+
+
+// Login A User
+
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+    
+        const {email,password} = req.body;
+        
+    
+    //Check if user has given email and password
+
+    if(!email || !password){
+        return next(new ErrorHandler("Please provide email and password",400));
+    }
+
+    const user = await User.findOne({email}).select("+password");
+
+    if(!user){
+        return next(new ErrorHandler("Invalid email or password",400));
+    }
+
+    //Check if password is correct
+    const isPasswordMatch = user.comparePassword(password);
+
+    if(!isPasswordMatch){
+        return next(new ErrorHandler("Invalid email or password",401));
+    }
+
+
+    //Check if user exists
+        if(!user || !(await user.correctPassword(password,user.password))){
+            return next(new ErrorHandler("Invalid Credentials",401));
+        }
+    
+        const token = await user.getJwtToken();
+        res.status(200).json({
+            success:true,
+            token,
+            });
+});
