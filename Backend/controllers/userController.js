@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
+const sendEmail = require("../utils/sendEmail");
 
 
 //Register A User
@@ -37,7 +38,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Invalid email or password",400));
     }
 
-    //Check if password is correct
+    //Check if password is correct 
     const isPasswordMatch = await user.comparePassword(password);
 
     if(!isPasswordMatch){
@@ -60,4 +61,52 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
         status:true,
         message:"Logged out successfully"
     });
+});
+
+// Forgot Password
+
+exports.forgotPassword = catchAsyncErrors(async (req, res, next) => { 
+
+    const user = await User.findOne({email:req.body.email});
+
+    if(!user){
+        return next(new ErrorHandler("No user found with this email",404));
+    }
+
+
+    //get reset password token
+
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({validateBeforeSave:false});
+
+    //send reset password token to user's email
+
+    const resetURL = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
+    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+
+    try{
+
+        await sendEmail({
+            email:user.email,
+            subject:"Ecommerce Password Recovery",
+            message,
+        });
+
+        res.status(200).json({
+            success:true,
+            message: `Email sent to ${user.email} successfully`,
+        });
+        
+        
+    } catch(error){
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({validateBeforeSave:false});
+
+        return next(new ErrorHandler(error.message,500));
+    }
+
+
 });
