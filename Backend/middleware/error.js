@@ -19,9 +19,24 @@ if(err.code === 11000){
     err = new ErrorHandler(message, 400);
 }
 
+// Wrong JWT Error
+
+if (err.name === "JsonWebTOkenError") {
+    message = `JSON web token invalid. Try again`;
+    err= new ErrorHandler(message, 400);
+        }
+    
+
+// JWT EXPIRE Error
+
+if (err.name === "TOkenExpireError") {
+    message = `JSON web token Expired. Try again`;
+    err= new ErrorHandler(message, 400);
+        }
+
 
     res.status(err.statusCode).json({
         success: false,
         message:err.message
     });
-}
+} 
