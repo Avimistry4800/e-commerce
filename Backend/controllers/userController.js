@@ -172,3 +172,92 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
     sendToken(user, 200, res);
 });
+
+//Update user Profile
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+    };
+
+    //Add cloudinary later
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+    });
+
+    res.status(200).json({
+        success: true,
+    });
+
+    sendToken(user, 200, res);
+});
+
+
+ // Get All Users (Admin)
+  
+ exports.getAllUser = catchAsyncErrors(async (req, res, next) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        success: true,
+        users,
+    });
+ });
+
+  // Get Single User (Admin)
+  
+  exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        return next(new ErrorHandler(`No user found with this id : ${req.params.id}`));
+    }
+
+    res.status(200).json({
+        success: true,
+        user,
+    });
+ });
+
+ //Update User ROle
+exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role,
+    };
+
+    const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+    });
+
+    res.status(200).json({
+        success: true,
+    });
+
+    sendToken(user, 200, res);
+});
+
+ //Delete User (Admin)
+ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+   const user = await User.findById(req.params.id);
+
+   if(!user){
+       return next(new ErrorHandler(`No user found with this id : ${req.params.id}`));
+   }
+
+   await user.remove();
+    //Remove cloudinary later
+
+    res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+    });
+
+    sendToken(user, 200, res);
+});
