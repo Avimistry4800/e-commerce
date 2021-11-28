@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const orderSScema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     shippingInfo: {
-        adress: {
+        address: {
             type: String,
             required: true,
         },
