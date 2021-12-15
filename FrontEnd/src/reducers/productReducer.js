@@ -8,7 +8,7 @@ import {
 export const productReducer = (state = { products: [] }, action) => {
     switch (action.type) {
         case ALL_PRODUCT_REQUEST:
-            return { loading: true, product: [] };
+            return { loading: true, products: [] };
 
         case ALL_PRODUCT_SUCCESS:
             return {
@@ -24,6 +24,6 @@ export const productReducer = (state = { products: [] }, action) => {
             return { ...state, error: null };
 
         default:
-            break;
+            return state;
     }
 };
