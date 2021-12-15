@@ -4,7 +4,7 @@ import Helmet from "react-helmet";
 const MetaData = ({ title }) => {
     return (
         <Helmet>
-            <title>{"MetaData"}</title>
+            <title>{title}</title>
         </Helmet>
     );
 };
