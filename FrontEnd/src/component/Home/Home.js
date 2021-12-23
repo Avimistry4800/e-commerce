@@ -1,21 +1,22 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { CgMouse } from 'react-icons/cg'
 import Product from './Product.js'
 import  './Home.css'
 import MetaData from '../layout/MetaData.js'
+import {getProduct} from '../../actions/productAction'
+import {useSelector, useDispatch} from 'react-redux'
 
 
-
-const product={
-    name: 'Redmi Note 8 Pro',
-    price: '$1299',
-    _id: '1',
-    images: [{
-        url: 'https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-8-pro-0.jpg'
-    }]
-}
 
 const Home = () => {
+
+    const dispatch = useDispatch();
+    const {loading,error, products, productsCount} = useSelector(state => state.products);
+
+    useEffect(() => {
+        dispatch(getProduct());
+    }, [dispatch]);
+
     return (
        <Fragment>
 
@@ -37,14 +38,10 @@ const Home = () => {
             Featured Products
         </h2>
         <div className="container" id="container">
-            <Product product={product} />
-            <Product product={product} />
-            <Product product={product} />
-            <Product product={product} />
-            <Product product={product} />
-            <Product product={product} />
-            <Product product={product} />
-            <Product product={product} />
+            {products && products.map( product => ( 
+                <Product key={product._id} product={product} />
+            ) )}
+            
         </div>
 
        </Fragment>

@@ -29,9 +29,9 @@ dispatch({
 
 
 }
-
+// Clear error
 export const clearErrors = () => async (dispatch) =>{
-    dispatch({type:CLEAR_ERRORS})
+    dispatch({type:CLEAR_ERRORS}) 
 
 
 }
