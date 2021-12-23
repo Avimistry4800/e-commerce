@@ -17,7 +17,6 @@ const Product = ({ product }) => {
         isHalf:true,
     }
 
-    console.log(product);
 
 
     return (

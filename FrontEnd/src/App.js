@@ -7,6 +7,7 @@ import Footer from "./component/layout/Footer/Footer.js";
 import Home from "./component/Home/Home.js";
 
 
+
 function App() {
 
   React.useEffect (() => {
@@ -27,6 +28,7 @@ function App() {
 
         <Routes >
         <Route exact path="/" element={<Home />} />
+    
         
       </Routes >
         

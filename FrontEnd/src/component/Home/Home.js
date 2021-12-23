@@ -5,20 +5,30 @@ import  './Home.css'
 import MetaData from '../layout/MetaData.js'
 import {getProduct} from '../../actions/productAction'
 import {useSelector, useDispatch} from 'react-redux'
+import Loader from '../layout/Loader/Loader.js'
+import { useAlert } from 'react-alert'
 
 
 
 const Home = () => {
 
+    const alert = useAlert()
+
     const dispatch = useDispatch();
     const {loading,error, products, productsCount} = useSelector(state => state.products);
 
     useEffect(() => {
+if(error){
+    return alert.error(error)
+}
+
         dispatch(getProduct());
-    }, [dispatch]);
+    }, [dispatch, error]);
 
     return (
-       <Fragment>
+      <Fragment>
+          {loading ? <Loader /> :
+           <Fragment>
 
            <MetaData title="ECOMMERCE"/>
             
@@ -44,7 +54,8 @@ const Home = () => {
             
         </div>
 
-       </Fragment>
+       </Fragment>}
+      </Fragment>
     )
 }
 
