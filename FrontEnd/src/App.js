@@ -5,6 +5,7 @@ import Header from "./component/layout/Header/Header.js";
 import WebFont from "webfontloader";
 import Footer from "./component/layout/Footer/Footer.js";
 import Home from "./component/Home/Home.js";
+import ProductDetails from "./component/ProductDetails/ProductDetails.js";
 
 
 
@@ -28,6 +29,7 @@ function App() {
 
         <Routes >
         <Route exact path="/" element={<Home />} />
+        <Route exact path="/product/:id" element={<ProductDetails />} />
     
         
       </Routes >
